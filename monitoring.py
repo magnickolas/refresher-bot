@@ -2,8 +2,8 @@ import asyncio
 from datetime import datetime
 
 import editdistance
+import httpx
 import pymongo
-import requests
 import yaml
 from html2text import html2text
 
@@ -54,7 +54,7 @@ async def monitor_changes():
                     old_content = await get_initial_content(id=id, url=url)
                     log.info(f"Checking for {id} url {url}")
                     try:
-                        content = html2text(requests.get(url).text)
+                        content = html2text((await httpx.get(url)).text)
                         if (
                             editdistance.eval(old_content, content)
                             > MonitoringConfig.changed_sym_threshold

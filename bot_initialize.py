@@ -1,4 +1,4 @@
-import requests
+import httpx
 import socks
 import yaml
 from html2text import html2text
@@ -47,7 +47,7 @@ def init_handlers(bot):
         id = str(event.chat_id)
         url = event.pattern_match.group(2)
         try:
-            content = html2text(requests.get(url).text)
+            content = html2text((await httpx.get(url)).text)
         except Exception as ex:
             log.exception(ex)
             await event.respond(f'Incorrect url: "{url}"')

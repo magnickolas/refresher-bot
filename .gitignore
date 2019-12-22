@@ -121,3 +121,6 @@ dmypy.json
 
 # bots sessions
 *.session
+
+# Pipfile lock
+Pipfile.lock

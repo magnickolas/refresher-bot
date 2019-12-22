@@ -10,10 +10,10 @@ pylint = "*"
 telethon = "*"
 pysocks = "*"
 pre-commit = "*"
-requests = "*"
 motor = "*"
 html2text = "*"
 editdistance = "*"
+httpx = "*"
 
 [requires]
 python_version = "3.7"
