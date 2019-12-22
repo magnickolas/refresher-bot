@@ -1,0 +1,25 @@
+name: "refresher_bot"
+
+# PUT HERE YOUR API_ID & API_HASH
+# FROM https://my.telegram.org/auth
+api_id: 111
+api_hash: 'hash'
+
+bot_token: 'bot_token'
+
+# NO USERS WHITELIST
+white_list: ~
+
+# TO ENABLE WHITELIST, UNCOMMENT AND USE THE FOLLOWING
+# ONE INSTEAD OF PREVIOUS (VALUE IS A LIST OF ALLOWED IDS)
+#white_list: [123456789]
+
+# NOT USING PROXY
+proxy: ~
+
+# TO USE PROXY, SET THE TYPE
+# (HTTP, SOCKS5, SOCKS4), HOST AND PORT
+#proxy:
+#  type: 'SOCKS5'
+#  host: '127.0.0.1'
+#  port: 12345
