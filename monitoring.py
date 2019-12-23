@@ -1,12 +1,12 @@
 import asyncio
 from datetime import datetime
 
-import editdistance
 import httpx
 import pymongo
 import yaml
 from html2text import html2text
 
+import levenshtein_distance
 from database import Database
 from logger_creator import get_logger
 
@@ -51,9 +51,8 @@ async def process(*, id, url):
     try:
         content = html2text((await httpx.get(url)).text)
         if (
-            editdistance.eval(old_content, content)
-            > MonitoringConfig.changed_sym_threshold
-        ):
+            await levenshtein_distance.calculate(old_content, content)
+        ) > MonitoringConfig.changed_sym_threshold:
             log.info(f"Found changes for {id} at {url}")
             return id, url, content
     except Exception:
