@@ -60,3 +60,5 @@ def init_handlers(bot):
         url = event.pattern_match.group(2)
         await delete_from_monitor_list(id=id, url=url)
         await event.respond(f"Stop monitoring {url}")
+
+    return start_handler, monitor_handler, delete_handler

@@ -45,24 +45,36 @@ async def get_initial_content(*, id: str, url: str):
     return item[id]["content"]
 
 
+async def process(*, id, url):
+    old_content = await get_initial_content(id=id, url=url)
+    log.info(f"Checking for {id} url {url}")
+    try:
+        content = html2text((await httpx.get(url)).text)
+        if (
+            editdistance.eval(old_content, content)
+            > MonitoringConfig.changed_sym_threshold
+        ):
+            log.info(f"Found changes for {id} at {url}")
+            return id, url, content
+    except Exception:
+        log.exception(f"Failed to check for {id} url {url}")
+
+
 async def monitor_changes():
     while True:
-        async for row in Database.url_collection.find():
-            for id, value in row.items():
-                if id != "_id":
-                    url = value["url"]
-                    old_content = await get_initial_content(id=id, url=url)
-                    log.info(f"Checking for {id} url {url}")
-                    try:
-                        content = html2text((await httpx.get(url)).text)
-                        if (
-                            editdistance.eval(old_content, content)
-                            > MonitoringConfig.changed_sym_threshold
-                        ):
-                            log.info(f"Found changes for {id} at {url}")
-                            yield id, url, content
-                    except Exception:
-                        log.exception(f"Failed to check for {id} url {url}")
+        tasks = [
+            process(id=id, url=value["url"])
+            async for row in Database.url_collection.find()
+            for id, value in row.items()
+            if id != "_id"
+        ]
+
+        for completed_task in asyncio.as_completed(tasks):
+            res = await completed_task
+            if res is not None:
+                id, url, content = res
+                yield id, url, content
+
         await asyncio.sleep(MonitoringConfig.sleep_time)
 
 
