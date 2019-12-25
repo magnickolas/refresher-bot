@@ -121,6 +121,7 @@ dmypy.json
 
 # bots sessions
 *.session
+*.session-journal
 
 # Pipfile lock
 Pipfile.lock
