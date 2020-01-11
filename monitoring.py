@@ -49,12 +49,13 @@ async def process(*, id, url):
     old_content = await get_initial_content(id=id, url=url)
     log.info(f"Checking for {id} url {url}")
     try:
-        content = html2text((await httpx.get(url)).text)
-        if (
-            await levenshtein_distance.calculate(old_content, content)
-        ) > MonitoringConfig.changed_sym_threshold:
-            log.info(f"Found changes for {id} at {url}")
-            return id, url, content
+        async with httpx.AsyncClient() as client:
+            content = html2text((await client.get(url)).text)
+            if (
+                await levenshtein_distance.calculate(old_content, content)
+            ) > MonitoringConfig.changed_sym_threshold:
+                log.info(f"Found changes for {id} at {url}")
+                return id, url, content
     except Exception:
         log.exception(f"Failed to check for {id} url {url}")
 

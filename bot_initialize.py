@@ -47,7 +47,8 @@ def init_handlers(bot):
         id = str(event.chat_id)
         url = event.pattern_match.group(2)
         try:
-            content = html2text((await httpx.get(url)).text)
+            async with httpx.AsyncClient() as client:
+                content = html2text((await client.get(url)).text)
         except Exception as ex:
             log.exception(ex)
             await event.respond(f'Incorrect url: "{url}"')
