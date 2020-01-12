@@ -59,7 +59,9 @@ def init_handlers(bot):
     async def delete_handler(event):
         id = str(event.chat_id)
         url = event.pattern_match.group(2)
-        await delete_from_monitor_list(id=id, url=url)
-        await event.respond(f"Stop monitoring {url}")
+        if await delete_from_monitor_list(id=id, url=url):
+            await event.respond(f"Stop monitoring {url}")
+        else:
+            await event.respond(f"Not found in monitor list {url}")
 
     return start_handler, monitor_handler, delete_handler

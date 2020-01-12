@@ -32,7 +32,8 @@ async def add_to_monitor_list(*, id: str, url: str, content: str):
 
 async def delete_from_monitor_list(*, id: str, url: str):
     log.info(f"Deleting from monitor list: id={id}, url={url}")
-    await Database.url_collection.delete_many({f"{id}.url": url})
+    result = await Database.url_collection.delete_many({f"{id}.url": url})
+    return result.deleted_count >= 1
 
 
 async def get_initial_content(*, id: str, url: str):
