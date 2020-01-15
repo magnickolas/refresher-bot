@@ -1,7 +1,7 @@
 # refresher-bot
 Telegram bot that takes your url and notifies you of updates on the web page.
 
-# Configuring
+## Configuring
 First, create a virtual environment with necessary packages:
 
 ```sh
@@ -14,7 +14,7 @@ Then put your telegram API and bot API keys into the [bot's config file](config/
 
 Also there are [MongoDB's](config/mongodb.yaml) and [monitoring's](config/monitoring.yaml) config files with a parameters' clarification.
 
-# Usage
+## Usage
 Start a bot with the following command:
 
 ```sh
