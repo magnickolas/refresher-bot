@@ -46,7 +46,7 @@ async def get_initial_content(*, id: str, url: str):
     return item[id]["content"]
 
 
-async def process(*, id, url):
+async def process(*, id: str, url: str):
     old_content = await get_initial_content(id=id, url=url)
     log.info(f"Checking for {id} url {url}")
     try:
