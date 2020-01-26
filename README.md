@@ -1,5 +1,5 @@
 # refresher-bot
-Telegram bot that takes your url and notifies you of updates on the web page.
+A telegram bot that takes your URL and notifies you of updates on the web page.
 
 ## Configuring
 First, install [pipenv] and create a virtual environment with necessary packages:
@@ -12,7 +12,7 @@ You should have [MongoDB] been installed.
 
 Then put your telegram API and bot API keys into the [bot's config file](config/bot.yaml).
 
-Also there are [MongoDB's](config/mongodb.yaml) and [monitoring's](config/monitoring.yaml) config files with a parameters' clarification.
+Also, there are [MongoDB's](config/mongodb.yaml) and [monitoring's](config/monitoring.yaml) config files with the parameters' clarification.
 
 ## Usage
 Start a bot with the following command:
