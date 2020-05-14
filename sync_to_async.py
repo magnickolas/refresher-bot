@@ -1,14 +1,13 @@
 import asyncio
-from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 from functools import wraps
 
 
 def make_async(f):
-    pool = ThreadPoolExecutor()
-
     @wraps(f)
-    def wrapper(*args, **kwargs):
-        future = pool.submit(f, *args, **kwargs)
-        return asyncio.wrap_future(future)
+    async def run(*args, **kwargs):
+        loop = asyncio.get_event_loop()
+        pf = partial(f, *args, **kwargs)
+        return await loop.run_in_executor(None, pf)
 
-    return wrapper
+    return run
