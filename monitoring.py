@@ -1,12 +1,13 @@
 import asyncio
+from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime
 
 import httpx
 import pymongo
 import yaml
+from editdistance import distance
 from html2text import html2text
 
-import levenshtein_distance
 from database import Database
 from logger_creator import get_logger
 
@@ -52,11 +53,13 @@ async def process(*, id: str, url: str):
     try:
         async with httpx.AsyncClient() as client:
             content = html2text((await client.get(url)).text)
-            if (
-                await levenshtein_distance.calculate(old_content, content)
-            ) > MonitoringConfig.changed_sym_threshold:
-                log.info(f"Found changes for {id} at {url}")
-                return id, url, content
+            loop = asyncio.get_running_loop()
+            with ProcessPoolExecutor() as pool:
+                if (
+                    await loop.run_in_executor(pool, distance, old_content, content)
+                ) > MonitoringConfig.changed_sym_threshold:
+                    log.info(f"Found changes for {id} at {url}")
+                    return id, url, content
     except Exception:
         log.exception(f"Failed to check for {id} url {url}")
 
